@@ -1,0 +1,75 @@
+1. List all invoice items, avoid duplicates.
+mysql> select distinct * from Invoice_item;
++--------+------+----------+
+| inv_id | pid  | quantity |
++--------+------+----------+
+|   1001 |  101 |        1 |
+|   1002 |  102 |        3 |
+|   1003 |  103 |        1 |
+|   1001 |  103 |        5 |
+|   1004 |  102 |        2 |
+|   1004 |  103 |        4 |
+|   1005 |  104 |        1 |
+|   1006 |  101 |        2 |
+|   1007 |  102 |        3 |
++--------+------+----------+
+9 rows in set (0.00 sec)
+    
+2. List the customer details who not live in ‘tvm’.
+mysql> select *from CUSTOMER;
++----+--------+-------------+----------+------------+
+| id | name   | address     | city     | ph_no      |
++----+--------+-------------+----------+------------+
+|  1 | Raju   | rose villa  | TVM      | 9061957995 |
+|  2 | Radha  | Manppura    | TVM      | 9246547784 |
+|  3 | Meera  | Blue Nest   | kochi    | 9988447521 |
+|  4 | Mayavi | kuppi villa | Balarama | 8600700    |
+|  5 | Sita   | Hill Top    | Trissur  | 9125344652 |
+|  6 | Abhin  | pattikad    | Kannur   | 9146826611 |
++----+--------+-------------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select *from CUSTOMER where city <> "TVM";
++----+--------+-------------+----------+------------+
+| id | name   | address     | city     | ph_no      |
++----+--------+-------------+----------+------------+
+|  3 | Meera  | Blue Nest   | kochi    | 9988447521 |
+|  4 | Mayavi | kuppi villa | Balarama | 8600700    |
+|  5 | Sita   | Hill Top    | Trissur  | 9125344652 |
+|  6 | Abhin  | pattikad    | Kannur   | 9146826611 |
++----+--------+-------------+----------+------------+
+4 rows in set (0.00 sec)
+
+
+3. Display the customer details sorted in ascending by city and descending by names.
+
+mysql> select *from CUSTOMER order by city asc,name desc;
++----+--------+-------------+----------+------------+
+| id | name   | address     | city     | ph_no      |
++----+--------+-------------+----------+------------+
+|  4 | Mayavi | kuppi villa | Balarama | 8600700    |
+|  6 | Abhin  | pattikad    | Kannur   | 9146826611 |
+|  3 | Meera  | Blue Nest   | kochi    | 9988447521 |
+|  5 | Sita   | Hill Top    | Trissur  | 9125344652 |
+|  1 | Raju   | rose villa  | TVM      | 9061957995 |
+|  2 | Radha  | Manppura    | TVM      | 9246547784 |
++----+--------+-------------+----------+------------+
+6 rows in set (0.00 sec)
+
+
+4. Find the customer names who have ‘e’ or ‘a’ in them and at least 3 characters in length.
+mysql> select *from CUSTOMER where (name like '%a%' or name like '%e%') and name like'___%';
++----+--------+-------------+----------+------------+
+| id | name   | address     | city     | ph_no      |
++----+--------+-------------+----------+------------+
+|  1 | Raju   | rose villa  | TVM      | 9061957995 |
+|  2 | Radha  | Manppura    | TVM      | 9246547784 |
+|  3 | Meera  | Blue Nest   | kochi    | 9988447521 |
+|  4 | Mayavi | kuppi villa | Balarama | 8600700    |
+|  5 | Sita   | Hill Top    | Trissur  | 9125344652 |
+|  6 | Abhin  | pattikad    | Kannur   | 9146826611 |
++----+--------+-------------+----------+------------+
+6 rows in set (0.00 sec)
+
+
+
