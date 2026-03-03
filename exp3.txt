@@ -1,0 +1,245 @@
+#3. TCL & DCL COMMANDS
+//a) TCL COMMANDS 
+ 1. Commit
+ mysql> SET AUTOCOMMIT=0;
+Query OK, 0 rows affected (0.00 sec)
+
+
+mysql> insert into members(reg,name)values(105,'abhim');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+
+mysql> select *from members;
++------+---------+
+| reg  | name    |
++------+---------+
+|  101 | adhrsh  |
+|  102 | sidhu   |
+|  103 | sudheer |
+|  104 | sudu    |
+|  105 | abhim   |
++------+---------+
+5 rows in set (0.00 sec)
+ 
+ 2. Rollback 
+ mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+mysql> insert into members(reg,name)values(106,'mohsthis');
+Query OK, 1 row affected (0.15 sec)
+
+mysql> select *from members;
++------+----------+
+| reg  | name     |
++------+----------+
+|  101 | adhrsh   |
+|  102 | sidhu    |
+|  103 | sudheer  |
+|  104 | sudu     |
+|  105 | abhim    |
+|  106 | mohsthis |
++------+----------+
+6 rows in set (0.00 sec)
+mysql> select *from members;
++------+--------+
+| reg  | name   |
++------+--------+
+|  101 | adhrsh |
+|  102 | sidhu  |
++------+--------+
+2 rows in set (0.00 sec)
+
+ 3. Savepoint
+ 
+mysql> set autocommit=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into members(reg,name)values(103,'ihsan');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into members(reg,name)values(104,'george');
+Query OK, 1 row affected (0.00 sec)
+{
+mysql> select *from members;
++------+--------+
+| reg  | name   |
++------+--------+
+|  101 | adhrsh |
+|  102 | sidhu  |
+|  103 | ihsan  |
+|  104 | george |
++------+--------+
+4 rows in set (0.00 sec)
+}
+
+mysql> savepoint sp1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update members set name='abhin' where reg=104;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0{
+mysql> select *from members;
++------+--------+
+| reg  | name   |
++------+--------+
+|  101 | adhrsh |
+|  102 | sidhu  |
+|  103 | ihsan  |
+|  104 | abhin  |
++------+--------+
+4 rows in set (0.00 sec)}
+
+
+
+mysql> savepoint sp2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into members values(110,'shree');
+Query OK, 1 row affected (0.00 sec)
+{mysql> select *from members;
++------+--------+
+| reg  | name   |
++------+--------+
+|  101 | adhrsh |
+|  102 | sidhu  |
+|  103 | ihsan  |
+|  104 | abhin  |
+|  110 | shree  |
++------+--------+
+5 rows in set (0.00 sec)}
+
+
+
+
+mysql> savepoint sp3;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from members where reg=110;
+Query OK, 1 row affected (0.00 sec)
+{
+mysql> select *from members;
++------+--------+
+| reg  | name   |
++------+--------+
+|  101 | adhrsh |
+|  102 | sidhu  |
+|  103 | ihsan  |
+|  104 | abhin  |
++------+--------+
+4 rows in set (0.01 sec)
+
+}
+
+mysql> rollback to sp3;
+Query OK, 0 rows affected (0.01 sec)
+{
+mysql> select *from members;
++------+--------+
+| reg  | name   |
++------+--------+
+|  101 | adhrsh |
+|  102 | sidhu  |
+|  103 | ihsan  |
+|  104 | abhin  |
+|  110 | shree  |
++------+--------+
+5 rows in set (0.00 sec)
+}
+
+mysql> rollback to sp1;
+Query OK, 0 rows affected (0.00 sec)
+{
+mysql> select *from members;
++------+--------+
+| reg  | name   |
++------+--------+
+|  101 | adhrsh |
+|  102 | sidhu  |
+|  103 | ihsan  |
+|  104 | george |
++------+--------+
+4 rows in set (0.00 sec)
+}
+
+mysql> commit;
+Query OK, 0 rows affected (0.09 sec)
+mysql> select *from members;
++------+--------+
+| reg  | name   |
++------+--------+
+|  101 | adhrsh |
+|  102 | sidhu  |
+|  103 | ihsan  |
+|  104 | george |
++------+--------+
+4 rows in set (0.00 sec)
+ b) DCL COMMAND 
+ 
+ Create two users user1, user2 
+ mysql> CREATE USER 'user1'@'localhost' IDENTIFIED BY 'Pass@1234';
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> CREATE USER 'user2'@'localhost' IDENTIFIED BY 'shif123#S';
+Query OK, 0 rows affected (0.13 sec)
+
+ 1. GRANT:   Give insert and select privilege to user 1 on customer table in the invoice database.
+ 
+ mysql> grant insert,select on INVOICE.CUSTOMER to 'user1'@'localhost';
+Query OK, 0 rows affected (0.14 sec)
+mysql> show grants for 'user1'@'localhost';
++---------------------------------------------------------------------+
+| Grants for user1@localhost                                          |
++---------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `user1`@`localhost`                           |
+| GRANT SELECT, INSERT ON `INVOICE`.`CUSTOMER` TO `user1`@`localhost` |
++---------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+Give update and delete privilege to user 2 on all tables in the invoice database. 
+mysql> grant update,delete on INVOICE.* to 'user2'@'localhost';
+Query OK, 0 rows affected (0.10 sec)
+mysql> show grants for 'user2'@'localhost';
++------------------------------------------------------------+
+| Grants for user2@localhost                                 |
++------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `user2`@`localhost`                  |
+| GRANT UPDATE, DELETE ON `INVOICE`.* TO `user2`@`localhost` |
++------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+
+ 2. REVOKE:   Remove delete privilege of user 2.
+ 
+ mysql> revoke delete on INVOICE.*from 'user2'@'localhost';
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> show grants for 'user2'@'localhost';
++----------------------------------------------------+
+| Grants for user2@localhost                         |
++----------------------------------------------------+
+| GRANT USAGE ON *.* TO `user2`@`localhost`          |
+| GRANT UPDATE ON `INVOICE`.* TO `user2`@`localhost` |
++----------------------------------------------------+
+2 rows in set (0.00 sec)
+
+
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
