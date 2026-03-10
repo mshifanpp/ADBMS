@@ -1,0 +1,44 @@
+1. List the product name and quantity of invoice items.
+ 
+mysql> select Product.pname,Invoice_item.quantity from Product natural join Invoice_item ;
++----------+----------+
+| pname    | quantity |
++----------+----------+
+| notebook |        1 |
+| pen      |        4 |
+| Mouse    |        5 |
+| Mouse    |        2 |
+| pen      |        6 |
++----------+----------+
+5 rows in set (0.00 sec)
+
+2.. Display the customer name, product name, invoice date of purchased item ‘pen’. 
+
+mysql> SELECT CUSTOMER.name, Product.pname, Invoice_master.inv_date FROM CUSTOMER JOIN Invoice_master ON CUSTOMER.id = Invoice_master.cust_id JOIN Invoice_item
+ON Invoice_master.inv_id = Invoice_item.inv_id JOIN Product ON Invoice_item.pid
+= Product.pid WHERE Product.pname = 'pen';
++-------+-------+------------+
+| name  | pname | inv_date   |
++-------+-------+------------+
+| Raju  | pen   | 2025-02-18 |
+| Meera | pen   | 2025-02-20 |
++-------+-------+------------+
+3. Display all customer details and invoice details must include customer has not
+purchased items.
+mysql> SELECT CUSTOMER.id, CUSTOMER.name, Invoice_master.inv_id, Invoice_master.inv_date FROM CUSTOMER LEFT OUTER JOIN Invoice_master ON CUSTOMER.id = Invoice_master.cust_id;
++----+--------+--------+------------+
+| id | name   | inv_id | inv_date   |
++----+--------+--------+------------+
+|  1 | Raju   |   1001 | 2025-02-18 |
+|  2 | Radha  |   1002 | 2025-02-16 |
+|  3 | Meera  |   1003 | 2025-02-20 |
+|  4 | Mayavi |   1004 | 2025-03-18 |
+|  5 | Sita   |   1005 | 2025-03-18 |
+|  6 | Abhin  |   1006 | 2025-05-12 |
++----+--------+--------+------------+
+6 rows in set (0.00 sec)
+
+
+
+6 rows in set (0.00 sec)
+
