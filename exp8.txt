@@ -1,0 +1,45 @@
+//RECORD-8 ACCESSING DATABASES: (VIEWS) 
+1.Create a view for customers who have purchased products.
+mysql> CREATE VIEW Cust_Details AS SELECT CUSTOMER.id,CUSTOMER.name, Product.pname,Invoice_item.quantity,Product.price FROM CUSTOMER
+ JOIN Invoice_master  ON CUSTOMER.id = Invoice_master.cust_id JOIN Invoice_item  ON Invoice_master.inv_id = Invoice_item.inv_id JOIN Product ON Invoice_item.pid = Product.pid;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> select *from Cust_Details;
++----+-------+----------+----------+---------+
+| id | name  | pname    | quantity | price   |
++----+-------+----------+----------+---------+
+|  3 | Meera | notebook |        1 |   41.82 |
+|  1 | Raju  | pen      |        4 |   20.40 |
+|  2 | Radha | Mouse    |        5 | 1040.40 |
+|  3 | Meera | Mouse    |        2 | 1040.40 |
+|  3 | Meera | pen      |        6 |   20.40 |
++----+-------+----------+----------+---------+
+5 rows in set (0.00 sec)
+
+2. Create a view for invoice products[cname, , inv_id, product_id, quantity]
+mysql> CREATE VIEW Invo_product AS SELECT   c.name AS cname,im.inv_id,ii.pid AS product_id,ii.quantity FROM CUSTOMER c JOIN Inve_master im ON c.id = im.cust_id JOIN Invoice_item ii ON im.inv_id = ii.in
+v_id;
+Query OK, 0 rows affected (0.17 sec)
+or)
+===================================================================================================================================================
+mysql> CREATE VIEW Invo_Product AS SELECT CUSTOMER.name AS cname, Invoice_master.inv_id, Invoice_item.pid AS product_id, Invoice_item.quantity FROM
+CUSTOMER  JOIN Invoice_master ON CUSTOMER.id = Invoice_master.cust_id JOIN
+ Invoice_item  ON Invoice_master.inv_id = Invoice_item.inv_id;
+Query OK, 0 rows affected (0.13 sec)
+===================================================================================================================================================
+
+mysql> select *from Invo_product;
++-------+--------+------------+----------+
+| cname | inv_id | product_id | quantity |
++-------+--------+------------+----------+
+| Meera |   1003 |        102 |        1 |
+| Raju  |   1001 |        101 |        4 |
+| Radha |   1002 |        103 |        5 |
+| Meera |   1003 |        103 |        2 |
+| Meera |   1003 |        101 |        6 |
++-------+--------+------------+----------+
+5 rows in set (0.00 sec)
+
+
+
+
