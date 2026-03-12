@@ -1,0 +1,26 @@
+12-  PL/SQL PROGRAMS – TRIGGERS 
+1. Create a trigger to handle inserts to the product relation ( if price < 5 the set price to 10).
+
+mysql> create trigger trig_relation before insert on Product for each row
+begin if new.price<5 then set new.price=10; end if; end;//
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> insert into Product values(344,'ERASER',3)//
+Query OK, 1 row affected (0.14 sec)
+
+mysql> select *from Product;
+    -> //
++-----+----------+----------+
+| pid | pname    | price    |
++-----+----------+----------+
+| 101 | pen      |    20.40 |
+| 102 | notebook |    41.82 |
+| 103 | Mouse    |  1040.40 |
+| 104 | Keyboard |     0.00 |
+| 105 | Laptop   | 83232.00 |
+| 106 | Case     |   520.20 |
+| 107 | Bag      |   416.16 |
+| 344 | ERASER   |    10.00 |
++-----+----------+----------+
+8 rows in set (0.00 sec)
+
