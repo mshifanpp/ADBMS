@@ -1,0 +1,68 @@
+1. Write a MongoDB query to sort customer details in ascending order of their name. 
+INVOICE> db.CUSTOMER.find().sort({Name:1})
+[
+  {
+    _id: ObjectId("69b7a9f3ff234d28185b1e0e"),
+    Cust_id: 2,
+    Name: 'Appu',
+    City: 'Kochi'
+  },
+  {
+    _id: ObjectId("69b7a9f3ff234d28185b1e0d"),
+    Cust_id: 1,
+    Name: 'Arun',
+    City: 'Kozhikode'
+  },
+  {
+    _id: ObjectId("69b7a9f3ff234d28185b1e0f"),
+    Cust_id: 3,
+    Name: 'Radha',
+    City: 'Tvm'
+  }
+
+ 2. Write a MongoDB query to count number of customers in each city. 
+ INVOICE> db.CUSTOMER.aggregate([ { $group: { _id: "$City", count: { $sum: 1 } } }] )
+[
+  { _id: 'Kochi', count: 1 },
+  { _id: 'Tvm', count: 1 },
+  { _id: 'Kozhikode', count: 1 }
+]
+else) ================================================================
+without $ for city it counts all the city
+INVOICE> db.CUSTOMER.aggregate([{ $group: { _id: "City", count: { $sum: 1 } } }])
+[ { _id: 'City', count: 3 } ]
+==================================================================================
+ 3. Write a MongoDB query to find minimum and maximum age in each city.
+ 
+ 
+ INVOICE> db.CUSTOMER.aggregate([ { $group: { _id: "$City", minAge: { $min: "$Age" }, maxAge: { $max: "$Age" } } }] )
+[
+  { _id: 'Kochi', minAge: 28, maxAge: 28 },
+  { _id: 'Tvm', minAge: 35, maxAge: 35 },
+  { _id: 'Kozhikode', minAge: 30, maxAge: 30 }
+]
+ 
+ 4. Write a MongoDB query using the $match stage to retrieve all customer documents whose
+customer_name starts with the letter “R”.
+
+INVOICE> db.CUSTOMER.aggregate([ { $match: { Name: { $regex: /^R/, $options: "i" } } }] )
+[
+  {
+    _id: ObjectId("69b7a9f3ff234d28185b1e0f"),
+    Cust_id: 3,
+    Name: 'Radha',
+    City: 'Tvm',
+    Age: 35
+  }
+]
+
+5. Write a query using $lookup to join CUSTOMER and PRODUCT collections and display only
+customer name, product name, and price.
+
+INVOICE> db.CUSTOMER.aggregate([ { $lookup: { from: "PRODUCT", localField: "Cust_id", /* capital F*/ foreignField: "Cust_id", /* capital F*/ as: "products" } }, { $unwind: "$products" }, { $project: { _id: 0, Customer_Name: "$Name", Product_Name: "$products.pname", Price: "$products.price" } }] )
+[
+  { Customer_Name: 'Arun', Product_Name: 'Pen', Price: 10 },
+  { Customer_Name: 'Arun', Product_Name: 'Laptop', Price: 35000 },
+  { Customer_Name: 'Appu', Product_Name: 'Slate', Price: 50 },
+  { Customer_Name: 'Radha', Product_Name: 'Bag', Price: 350 }
+
