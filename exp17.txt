@@ -1,0 +1,26 @@
+1. Write a MongoDB query to create a user “CUSTOMER2” and grant the read role in the INVOICE database. 
+
+INVOICE> db.createUser({ user: "CUSTOMER2", pwd: "Password123", roles: [ { role: "read", db: "INVOICE" }] })
+{ ok: 1 }
+
+
+
+ 2. Write a MongoDB query to create the backup for the INVOICE database.
+ (base) ksb@ksb-OptiPlex-3060:~$ mongodump --db INVOICE --out ~/Desktop/shifan/sem2/dbms
+2026-03-19T15:09:00.274+0530	writing INVOICE.CUSTOMER to /home/ksb/Desktop/shifan/sem2/dbms/INVOICE/CUSTOMER.bson
+2026-03-19T15:09:00.275+0530	done dumping INVOICE.CUSTOMER (3 documents)
+2026-03-19T15:09:00.276+0530	writing INVOICE.PRODUCT to /home/ksb/Desktop/shifan/sem2/dbms/INVOICE/PRODUCT.bson
+2026-03-19T15:09:00.277+0530	done dumping INVOICE.PRODUCT (8 documents)
+ 
+ 3. Write a MongoDB query to restore a particular database or a collection. 
+ 
+ GRADING> db.dropDatabase()
+{ ok: 1, dropped: 'GRADING' }
+
+ mongorestore --db GRADING ~/Desktop/shifan/sem2/dbms/GRADING
+2026-03-19T15:23:17.309+0530	9 document(s) restored successfully.
+
+ 4. Write a MongoDB query to create an index for the collection customer using the field customer_name.
+ INVOICE> db.CUSTOMER.createIndex({ Name: 1 })
+Name_1
+
